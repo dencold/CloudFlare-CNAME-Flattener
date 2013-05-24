@@ -6,7 +6,7 @@ import urllib
 import socket
 
 #Augh, global variables
-ELB='[INSERT CNAME VALUE HERE]'    # Your CNAME value, i.e. myapp.herokuapp.com
+CNAME='[INSERT CNAME VALUE HERE]'    # Your CNAME value, i.e. myapp.herokuapp.com
 API='[YOUR CLIENT API KEY]'        # Your CloudFlare client API key found at https://www.cloudflare.com/my-account
 EMAIL='[YOUR CLOUDFLARE E-MAIL]'   # Your CloudFlare email address
 DOMAIN='[CLOUDFLARE DOMAIN NAME]'  # Your CloudFlare domain that you're using this for
@@ -18,7 +18,7 @@ def call_api(params):
 	return go.read()
 
 def get_new_ips():
-    resolve = socket.gethostbyname_ex(ELB)
+    resolve = socket.gethostbyname_ex(CNAME)
     return resolve[2]
 
 def recordList(): 
@@ -79,10 +79,10 @@ def pruneUnused(exclusion, current_records):
 
 def compareDNS():
 	cf_records = getCurrentIPs()
-	elb_ips = get_new_ips()
+	cname_ips = get_new_ips()
 	do_not_touch = list()	
 
-	for ip in elb_ips:
+	for ip in cname_ips:
 		if ip not in cf_records:
 			print "Adding Record " + ip
 			response = json.loads(addRecord(ip))
